@@ -1,0 +1,13 @@
+name: 'Soteria'
+description: 'Send the repo to soteria server for the security audit'
+inputs:
+  soteria-token:
+    description: 'The token (invitation code) that Soteria has issued to the user'
+    required: true
+    default: ''
+outputs:
+  reports:
+    description: 'The analysis report in SARIF format'
+runs:
+  using: 'node16'
+  main: 'index.js'

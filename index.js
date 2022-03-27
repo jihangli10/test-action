@@ -1,0 +1,46 @@
+import * as core from '@actions/core';
+import * as github from '@actions/github'
+import { execSync } from 'child_process';
+import axios from 'axios';
+
+const apiVersion = 'v1';
+const serverUrl = 'https://pilot.soteria.dev/api';
+
+export async function run() {
+    try {
+      const password = core.getInput('soteria-token', {required: true});
+      const issue = github.context.issue;
+      execSync(`tar -czvf code.tar.gz *`);
+      const formData = new FormData();
+      const taskName = github.context.payload.repository.name + (new Date()).toLocalString();
+      formData.append(
+        'taskName',
+        taskName
+      );
+      formData.append(
+        'description',
+        ''
+      );
+      formData.append(
+        'password',
+        password
+      );
+      formData.append(
+        'code',
+        fs.createReadStream('./code.tar.gz'),
+        'name'
+      );
+      const response = await axios.post(`${this.serverUrl}/${this.apiVersion}/action`, formData);
+      if (response.data.reports) {
+        core.setOutput('reports', response.data.reports);
+      } else {
+        core.setFailed('Failed to get report');
+      }
+    }
+    catch (error) {
+      core.setFailed(error.message);
+      throw error;
+    }
+}
+
+run();
