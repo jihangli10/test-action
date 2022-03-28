@@ -6,7 +6,7 @@ const axios = require('axios');
 const apiVersion = 'v1';
 const serverUrl = 'https://pilot.soteria.dev/api';
 
-function run() {
+async function run() {
     try {
       const password = core.getInput('soteria-token', {required: true});
       const issue = github.context.issue;
