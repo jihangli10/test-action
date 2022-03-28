@@ -16308,7 +16308,7 @@ async function run() {
       const issue = github.context.issue;
       execSync(`tar -czvf code.tar.gz *`);
       const formData = new FormData();
-      const taskName = github.context.payload.repository.name + (new Date()).toLocalString();
+      const taskName = github.context.payload.repository.name + ' ' + (new Date()).toLocaleString();
       formData.append(
         'taskName',
         taskName
