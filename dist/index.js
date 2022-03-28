@@ -16340,7 +16340,9 @@ async function run() {
     try {
       const password = core.getInput('soteria-token', {required: true});
       const issue = github.context.issue;
-      execSync(`tar -czf /tmp/code.tgz *`);
+      execSync(`base=$(basename $PWD)
+                cd ..
+                tar -czf /tmp/code.tgz $base`);
       const formData = new FormData();
       const taskName = github.context.payload.repository.name + ' ' + (new Date()).toLocaleString();
       formData.append(
