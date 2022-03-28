@@ -1,12 +1,12 @@
-import * as core from '@actions/core';
-import * as github from '@actions/github'
-import { execSync } from 'child_process';
-import axios from 'axios';
+const core = require('@actions/core');
+const github = require('@actions/github');
+const { execSync } = require('child_process');
+const axios = require('axios');
 
 const apiVersion = 'v1';
 const serverUrl = 'https://pilot.soteria.dev/api';
 
-export async function run() {
+function run() {
     try {
       const password = core.getInput('soteria-token', {required: true});
       const issue = github.context.issue;
