@@ -8,7 +8,7 @@ const fs = require('fs');
 const apiVersion = 'v1';
 const serverUrl = 'https://pilot.soteria.dev/api';
 
-function run() {
+export async function run() {
     try {
       const password = core.getInput('soteria-token', {required: true});
       const issue = github.context.issue;
@@ -32,15 +32,17 @@ function run() {
         fs.createReadStream('./code.tar.gz'),
         'name'
       );
-      formData.submit(`${serverUrl}/${apiVersion}/action`, function(err, res) {
-        if (err) {
-          core.setFailed('Failed to get report');
-          return;
-        }
-        console.log(res);
-        core.setOutput('reports', res.data.reports);
+      const formHeaders = formData.getHeaders();
+      const response = await axios.post(`${serverUrl}/${apiVersion}/action`, formData, {
+        headers: {...formHeaders}
       });
-    } catch (error) {
+      if (response.data.reports) {
+        core.setOutput('reports', response.data.reports);
+      } else {
+        core.setFailed('Failed to get report');
+      }
+    }
+    catch (error) {
       core.setFailed(error.message);
       throw error;
     }

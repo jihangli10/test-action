@@ -16285,14 +16285,47 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__nccwpck_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__nccwpck_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
+"use strict";
+__nccwpck_require__.r(__webpack_exports__);
+/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
+/* harmony export */   "run": () => (/* binding */ run)
+/* harmony export */ });
 const core = __nccwpck_require__(3493);
 const github = __nccwpck_require__(2682);
 const { execSync } = __nccwpck_require__(2081);
@@ -16303,7 +16336,7 @@ const fs = __nccwpck_require__(7147);
 const apiVersion = 'v1';
 const serverUrl = 'https://pilot.soteria.dev/api';
 
-function run() {
+async function run() {
     try {
       const password = core.getInput('soteria-token', {required: true});
       const issue = github.context.issue;
@@ -16327,15 +16360,17 @@ function run() {
         fs.createReadStream('./code.tar.gz'),
         'name'
       );
-      formData.submit(`${serverUrl}/${apiVersion}/action`, function(err, res) {
-        if (err) {
-          core.setFailed('Failed to get report');
-          return;
-        }
-        console.log(res);
-        core.setOutput('reports', res.data.reports);
+      const formHeaders = formData.getHeaders();
+      const response = await axios.post(`${serverUrl}/${apiVersion}/action`, formData, {
+        headers: {...formHeaders}
       });
-    } catch (error) {
+      if (response.data.reports) {
+        core.setOutput('reports', response.data.reports);
+      } else {
+        core.setFailed('Failed to get report');
+      }
+    }
+    catch (error) {
       core.setFailed(error.message);
       throw error;
     }
