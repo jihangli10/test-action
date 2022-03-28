@@ -3,6 +3,7 @@ const github = require('@actions/github');
 const { execSync } = require('child_process');
 const axios = require('axios');
 const FormData = require('form-data');
+const fs = require('fs');
 
 const apiVersion = 'v1';
 const serverUrl = 'https://pilot.soteria.dev/api';

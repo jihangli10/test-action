@@ -16298,6 +16298,7 @@ const github = __nccwpck_require__(2682);
 const { execSync } = __nccwpck_require__(2081);
 const axios = __nccwpck_require__(1283);
 const FormData = __nccwpck_require__(6054);
+const fs = __nccwpck_require__(7147);
 
 const apiVersion = 'v1';
 const serverUrl = 'https://pilot.soteria.dev/api';
