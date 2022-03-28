@@ -16327,7 +16327,11 @@ async function run() {
         fs.createReadStream('./code.tar.gz'),
         'name'
       );
-      const response = await axios.post(`${serverUrl}/${apiVersion}/action`, formData);
+      const response = await axios.post(`${serverUrl}/${apiVersion}/action`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+          }
+      });
       if (response.data.reports) {
         core.setOutput('reports', response.data.reports);
       } else {
