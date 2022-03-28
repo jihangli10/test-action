@@ -16303,7 +16303,7 @@ const fs = __nccwpck_require__(7147);
 const apiVersion = 'v1';
 const serverUrl = 'https://pilot.soteria.dev/api';
 
-async function run() {
+function run() {
     try {
       const password = core.getInput('soteria-token', {required: true});
       const issue = github.context.issue;
@@ -16327,18 +16327,15 @@ async function run() {
         fs.createReadStream('./code.tar.gz'),
         'name'
       );
-      const response = await axios.post(`${serverUrl}/${apiVersion}/action`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-          }
+      formData.submit(`${serverUrl}/${apiVersion}/action`, function(err, res) {
+        if (err) {
+          core.setFailed('Failed to get report');
+          return;
+        }
+        console.log(res);
+        core.setOutput('reports', res.data.reports);
       });
-      if (response.data.reports) {
-        core.setOutput('reports', response.data.reports);
-      } else {
-        core.setFailed('Failed to get report');
-      }
-    }
-    catch (error) {
+    } catch (error) {
       core.setFailed(error.message);
       throw error;
     }
