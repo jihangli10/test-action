@@ -12,7 +12,7 @@ export async function run() {
     try {
       const password = core.getInput('soteria-token', {required: true});
       const issue = github.context.issue;
-      execSync(`tar -czvf code.tar.gz *`);
+      execSync(`tar -zf code.tgz .`);
       const formData = new FormData();
       const taskName = github.context.payload.repository.name + ' ' + (new Date()).toLocaleString();
       formData.append(
@@ -29,7 +29,7 @@ export async function run() {
       );
       formData.append(
         'code',
-        fs.createReadStream('./code.tar.gz'),
+        fs.createReadStream('./code.tgz'),
         'name'
       );
       const formHeaders = formData.getHeaders();
