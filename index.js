@@ -40,15 +40,14 @@ export async function run() {
         headers: {...formHeaders}
       });
       if (response.data.reports) {
-        console.log('%cAnalysis completed!', 'color: LightCyan');
+        core.info('%cAnalysis completed!', 'color: LightCyan');
         console.log('The security audit reports are shown below:');
         for (const report of response.data.reports) {
           core.startGroup(report.properties.title);
           console.dir(response.data.reports, { depth: null });
           core.endGroup();
         }
-        console.log('');
-        console.log('The reports are also accessible in the github action workflow as ${{ steps.soteria.outputs.reports }}');
+        core.info('The reports are also accessible in the github action workflow as ${{ steps.soteria.outputs.reports }}');
         core.setOutput('reports', response.data.reports);
       } else {
         core.setFailed('Failed to get report');
