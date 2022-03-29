@@ -16364,23 +16364,13 @@ async function run() {
       );
       const formHeaders = formData.getHeaders();
       console.log('Analyzing code...');
-      var twirlTimer = (function() {
-        var P = ["\\", "|", "/", "-"];
-        var x = 0;
-        return setInterval(function() {
-          process.stdout.write("\r" + P[x++]);
-          x &= 3;
-        }, 250);
-      })();
       const response = await axios.post(`${serverUrl}/${apiVersion}/action`, formData, {
         headers: {...formHeaders}
       });
-      clearInterval(twirlTimer);
-      process.stdout.write("\r");
       if (response.data.reports) {
         console.log('%cAnalysis completed!', 'color: LightCyan');
         console.log('The security audit reports are shown below:');
-        for (report of response.data.reports) {
+        for (const report of response.data.reports) {
           core.startGroup(report.properties.title);
           console.dir(response.data.reports, { depth: null });
           core.endGroup();
