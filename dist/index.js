@@ -16363,14 +16363,30 @@ async function run() {
         'name'
       );
       const formHeaders = formData.getHeaders();
+      console.log('Analyzing code...');
+      var twirlTimer = (function() {
+        var P = ["\\", "|", "/", "-"];
+        var x = 0;
+        return setInterval(function() {
+          process.stdout.write("\r" + P[x++]);
+          x &= 3;
+        }, 250);
+      })();
       const response = await axios.post(`${serverUrl}/${apiVersion}/action`, formData, {
         headers: {...formHeaders}
       });
+      clearInterval(twirlTimer);
+      process.stdout.write("\r");
       if (response.data.reports) {
-        core.startGroup('Report of the security audit:');
-        console.dir(response.data.reports, { depth: null });
-        core.endGroup();
-        console.log('The report is also accessible in the workflow as ${{ steps.soteria.outputs.reports }}');
+        console.log('%cAnalysis completed!', 'color: LightCyan');
+        console.log('The security audit reports are shown below:');
+        for (report of response.data.reports) {
+          core.startGroup(report.properties.title);
+          console.dir(response.data.reports, { depth: null });
+          core.endGroup();
+        }
+        console.log('');
+        console.log('The reports are also accessible in the github action workflow as ${{ steps.soteria.outputs.reports }}');
         core.setOutput('reports', response.data.reports);
       } else {
         core.setFailed('Failed to get report');
