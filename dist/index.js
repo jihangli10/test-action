@@ -16367,7 +16367,10 @@ async function run() {
         headers: {...formHeaders}
       });
       if (response.data.reports) {
+        core.startGroup('Report of the security audit:');
         console.dir(response.data.reports, { depth: null });
+        core.endGroup();
+        console.log('The report is also accessible in the workflow as ${{ steps.soteria.outputs.reports }}');
         core.setOutput('reports', response.data.reports);
       } else {
         core.setFailed('Failed to get report');
