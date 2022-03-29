@@ -16367,6 +16367,7 @@ async function run() {
         headers: {...formHeaders}
       });
       if (response.data.reports) {
+        console.log(response.data.reports);
         core.setOutput('reports', response.data.reports);
       } else {
         core.setFailed('Failed to get report');
