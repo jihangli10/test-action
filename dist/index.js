@@ -16368,11 +16368,11 @@ async function run() {
         headers: {...formHeaders}
       });
       if (response.data.reports) {
-        core.info('%cAnalysis completed!', 'color: LightCyan');
+        core.info('Analysis completed!');
         console.log('The security audit reports are shown below:');
         for (const report of response.data.reports) {
           core.startGroup(report.properties.title);
-          console.dir(response.data.reports, { depth: null });
+          console.dir(report, { depth: null });
           core.endGroup();
         }
         core.info('The reports are also accessible in the github action workflow as ${{ steps.soteria.outputs.reports }}');
