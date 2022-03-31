@@ -16368,8 +16368,8 @@ async function run() {
         headers: {...formHeaders}
       });
       console.log(response);
-      if (response.stream) {
-        fs.writeFileSync(`report.sarif`, response.stream, function (err) {
+      if (response.data.report) {
+        fs.writeFileSync(`report.sarif`, JSON.stringify(response.data.report), function (err) {
           if (err) {
             core.setFailed(error.message);
             throw error;
