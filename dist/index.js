@@ -16367,6 +16367,7 @@ async function run() {
       const response = await axios.post(`${serverUrl}/${apiVersion}/action`, formData, {
         headers: {...formHeaders}
       });
+      console.log(response);
       if (response.stream) {
         fs.writeFileSync(`report.sarif`, response.stream, function (err) {
           if (err) {
