@@ -16335,6 +16335,7 @@ const fs = __nccwpck_require__(7147);
 
 const apiVersion = 'v1';
 const serverUrl = 'https://pilot.soteria.dev/api';
+const saveFilename = 'soteria-report.sarif';
 
 async function run() {
     try {
@@ -16367,18 +16368,17 @@ async function run() {
       const response = await axios.post(`${serverUrl}/${apiVersion}/action`, formData, {
         headers: {...formHeaders}
       });
-      console.log(response);
       if (response.data.report) {
-        fs.writeFileSync(`report.sarif`, JSON.stringify(response.data.report), function (err) {
+        fs.writeFileSync(saveFilename, JSON.stringify(response.data.report), function (err) {
           if (err) {
             core.setFailed(error.message);
             throw error;
           }
         });
         core.info('Analysis completed!');
-        core.info('The report is saved in workspace as "report.sarif"');
+        core.info(`The report is saved in the workspace as "${saveFilename}"`);
       } else {
-        core.setFailed('Failed to get report');
+        core.setFailed('Failed to get report!');
       }
     }
     catch (error) {
