@@ -35,20 +35,19 @@ export async function run() {
         'name'
       );
       const formHeaders = formData.getHeaders();
-      console.log('Analyzing code...');
+      core.info('Analyzing code...');
       const response = await axios.post(`${serverUrl}/${apiVersion}/action`, formData, {
         headers: {...formHeaders}
       });
-      if (response.data.reports) {
+      if (response.stream) {
+        fs.writeFileSync(`report.sarif`, response.stream, function (err) {
+          if (err) {
+            core.setFailed(error.message);
+            throw error;
+          }
+        });
         core.info('Analysis completed!');
-        console.log('The security audit reports are shown below:');
-        for (const report of response.data.reports) {
-          core.startGroup(report.properties.title);
-          console.dir(report, { depth: null });
-          core.endGroup();
-        }
-        core.info('The reports are also accessible in the github action workflow as ${{ steps.soteria.outputs.reports }}');
-        core.setOutput('reports', response.data.reports);
+        core.info('The report is saved in workspace as "report.sarif"');
       } else {
         core.setFailed('Failed to get report');
       }
