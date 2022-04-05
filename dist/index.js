@@ -16346,24 +16346,12 @@ async function run() {
                 tar -czf /tmp/code.tgz $base`);
       const formData = new FormData();
       const taskName = github.context.payload.repository.name + ' ' + (new Date()).toLocaleString();
-      formData.append(
-        'taskName',
-        taskName
-      );
-      formData.append(
-        'description',
-        ''
-      );
-      formData.append(
-        'password',
-        password
-      );
-      formData.append(
-        'code',
-        fs.createReadStream('/tmp/code.tgz'),
-        'name'
-      );
+      formData.append('taskName', taskName);
+      formData.append('description', '');
+      formData.append('password', password);
+      formData.append('code', fs.createReadStream('/tmp/code.tgz'), 'name');
       const formHeaders = formData.getHeaders();
+
       core.info('Analyzing code...');
       const response = await axios.post(`${serverUrl}/${apiVersion}/action`, formData, {
         headers: {...formHeaders}
@@ -16377,6 +16365,9 @@ async function run() {
         });
         core.info('Analysis completed!');
         core.info(`The report is saved in the workspace as "${saveFilename}"`);
+        core.info(`To download the SARIF report, visit: ${response.data.downloadLink}`);
+        core.info(`To view the report online, visit: ${response.data.reportLink}`);
+
       } else {
         core.setFailed('Failed to get report!');
       }
