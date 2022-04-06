@@ -1,8 +1,8 @@
 # Github action for security auditing by Soteria
 
-This action conducts security auditing on Solana smart contract using Soteria tool.
+This action conducts security auditing on Solana smart contract using the Soteria tool.
 
-Note: The action will send your source code to Soteria's server for the analysis. By using this action, you certify that you agree to the [Terms of Use]() and the [Privacy Policies]() of Soteria.
+Note: The action will send your source code to Soteria's server for analysis. By using this action, you certify that you agree to the [Terms of Use]() and the [Privacy Policies]() of Soteria.
 
 ## Input
 
@@ -12,7 +12,7 @@ Note: The action will send your source code to Soteria's server for the analysis
 
 For those who have previously used the Soteria web app, the token is the same as the invitation code.
 
-If you wish to get a token and try Soteria tool, please email [contact@soteria.dev](contact@soteria.dev).
+If you wish to get a token and try the Soteria tool, please email [contact@soteria.dev](contact@soteria.dev).
 
 After acquiring the token, navigate to your repository, click Settings -> Secrets -> Actions -> New Repository Secret, Name the token in the `Name` field, paste the token in the `Value` field and click `Add secret`. The token is now accessible in the workflow as `${{ secrets.YOUR_TOKEN_NAME }}`
 
