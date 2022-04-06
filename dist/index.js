@@ -16365,9 +16365,7 @@ async function run() {
         });
         core.info('Analysis completed!');
         core.info(`The report is saved in the workspace as "${saveFilename}"`);
-        core.info(`To download the SARIF report, visit: ${response.data.downloadLink}`);
-        core.info(`To view the report online, visit: ${response.data.reportLink}`);
-
+        core.info(`To view and download the report on Soteria web app, visit: ${response.data.reportLink}`);
       } else {
         core.setFailed('Failed to get report!');
       }

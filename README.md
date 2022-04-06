@@ -10,7 +10,7 @@ Note: The action will send your source code to Soteria's server for the analysis
 
 **Required.** The token provided by Soteria.
 
-For those who have previosly used the Soteria web app, the token is the same as the invitation code.
+For those who have previously used the Soteria web app, the token is the same as the invitation code.
 
 If you wish to get a token and try Soteria tool, please email [contact@soteria.dev](contact@soteria.dev).
 
@@ -31,10 +31,8 @@ A file named `soteria-report.sarif` will be generated in the workspace.
 ## Example usage
     # Checkout the source code into the github workspace
     - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
     # Call the action for Soteria tool.
-    - uses: jihangli10/test-action@v1
+    - uses: coderrect/soteria-analysis@v1
       with:
         soteria-token: ${{ secrets.SOTERIA_TOKEN }}
     # Optional. Upload the report to github code scanning

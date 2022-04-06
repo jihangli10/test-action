@@ -1,5 +1,5 @@
 name: 'Soteria'
-description: 'Send the repo to soteria server for the security audit'
+description: 'This action conducts security auditing on Solana smart contract using Soteria tool.'
 inputs:
   soteria-token:
     description: 'The token (same as the invitation code) that Soteria has provided to the user'
