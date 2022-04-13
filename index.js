@@ -16,13 +16,13 @@ export async function run() {
                 cd ..
                 tar -czf /tmp/code.tgz $base`);
       const formData = new FormData();
-      const commitId = github.context.payload.commit_oid;
+      const commit = github.context.sha;
       console.log(github.context);
-      const taskName = github.context.payload.repository.name + ' ' + commitId;
+      const taskName = github.context.payload.repository.name + ' ' + commit;
       formData.append('taskName', taskName);
       formData.append('description', '');
       formData.append('password', password);
-      formData.append('commitId', commitId);
+      formData.append('commit', commit);
       formData.append('code', fs.createReadStream('/tmp/code.tgz'), 'name');
       const formHeaders = formData.getHeaders();
 
@@ -39,12 +39,15 @@ export async function run() {
         });
 
         core.info('Analysis completed!');
-        core.info(`Total number of warnings: ${response.data.numTotalIssues}`);
+        if (response.data.numTotalIssues > 0) {
+          core.info(`Total number of warnings: ${response.data.numTotalIssues}`);
+          core.setFailed(`${response.data.numTotalIssues} vulnerabilities are found!`)
+        } else {
+          core.info(`All tests are passed!`);
+        }
         core.info(`The report is saved in the workspace as "${saveFilename}"`);
         core.info(`To view and download the report on Soteria web app, visit: ${response.data.reportLink}`);
-        if (response.data.numTotalIssues > 0) {
-          core.setFailed(`${response.data.numTotalIssues} vulnerabilities are found!`)
-        }
+
       } else {
         core.setFailed('Failed to get report!');
       }
