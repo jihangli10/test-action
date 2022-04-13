@@ -39,15 +39,13 @@ export async function run() {
         });
 
         core.info('Analysis completed!');
-        if (response.data.numTotalIssues > 0) {
-          core.info(`Total number of warnings: ${response.data.numTotalIssues}`);
-          core.setFailed(`${response.data.numTotalIssues} vulnerabilities are found!`)
-        } else {
+        if (response.data.numTotalIssues === 0) {
           core.info(`All tests are passed!`);
+        } else {
+          core.setFailed(`Total number of warnings: ${response.data.numTotalIssues}`)
         }
         core.info(`The report is saved in the workspace as "${saveFilename}"`);
         core.info(`To view and download the report on Soteria web app, visit: ${response.data.reportLink}`);
-
       } else {
         core.setFailed('Failed to get report!');
       }
