@@ -16345,6 +16345,7 @@ async function run() {
                 tar -czf /tmp/code.tgz $base`);
       const formData = new FormData();
       const commitId = github.context.payload.commit_oid;
+      console.log(github.context);
       const taskName = github.context.payload.repository.name + ' ' + commitId;
       formData.append('taskName', taskName);
       formData.append('description', '');
