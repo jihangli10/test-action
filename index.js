@@ -20,12 +20,14 @@ export async function run() {
       // execSync(`base=$(basename $PWD)
       //           cd ..
       //           tar -czf /tmp/code.tgz $base`);
+
+
+      fs.mkdirSync(`/tmp/${repoName}/${path}`, { recursive: true })
       execSync(`
-        workspace=$(pwd)
-        mkdir –p /tmp/${repoName}/${path}
-        cp "\${workspace}/${path}/*" /tmp/${repoName}/${path}
-        tar -czf /tmp/code.tgz /tmp/${repoName}
-      `)
+      CODE_DIR=$(pwd)
+      cp "\${CODE_DIR}/${path}/*" /tmp/${repoName}/${path}
+      tar -czf /tmp/code.tgz /tmp/${repoName}
+    `)
 
       const formData = new FormData();
       formData.append('taskName', taskName);
