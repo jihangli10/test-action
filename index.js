@@ -6,19 +6,28 @@ const FormData = require('form-data');
 const fs = require('fs');
 
 const apiVersion = 'v1';
-const serverUrl = 'https://pilot.soteria.dev/api';
+const apiUrl = 'https://pilot.soteria.dev/api';
 const saveFilename = 'soteria-report.sarif';
 
 export async function run() {
     try {
       const password = core.getInput('soteria-token', {required: true});
-      execSync(`base=$(basename $PWD)
-                cd ..
-                tar -czf /tmp/code.tgz $base`);
-      const formData = new FormData();
+      const path = core.getInput('path', {required: false}) || "";
       const commit = github.context.sha;
-      console.log(github.context);
-      const taskName = github.context.payload.repository.name + ' ' + commit;
+      const repoName = github.context.payload.repository.name;
+      const taskName = repoName + ' ' + commit;
+
+      // execSync(`base=$(basename $PWD)
+      //           cd ..
+      //           tar -czf /tmp/code.tgz $base`);
+      execSync(`
+        workspace=$(pwd)
+        mkdir –p /tmp/${repoName}/${path}
+        cp "\${workspace}/${path}/*" /tmp/${repoName}/${path}
+        tar -czf /tmp/code.tgz /tmp/${repoName}
+      `)
+
+      const formData = new FormData();
       formData.append('taskName', taskName);
       formData.append('description', '');
       formData.append('password', password);
@@ -27,7 +36,7 @@ export async function run() {
       const formHeaders = formData.getHeaders();
 
       core.info('Analyzing code...');
-      const response = await axios.post(`${serverUrl}/${apiVersion}/action`, formData, {
+      const response = await axios.post(`${apiUrl}/${apiVersion}/action`, formData, {
         headers: {...formHeaders}
       });
       if (response.data.report) {
