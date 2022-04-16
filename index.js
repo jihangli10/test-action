@@ -16,12 +16,7 @@ export async function run() {
       const commit = github.context.sha;
       const repoName = github.context.payload.repository.name;
       const taskName = repoName + ' ' + commit;
-
-      // execSync(`base=$(basename $PWD)
-      //           cd ..
-      //           tar -czf /tmp/code.tgz $base`);
-
-
+      
       fs.mkdirSync(`/tmp/${repoName}/${path}`, { recursive: true })
       execSync(`
         CODE_DIR=$(pwd)
