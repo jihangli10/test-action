@@ -16353,7 +16353,7 @@ async function run() {
       fs.mkdirSync(`/tmp/${repoName}/${path}`, { recursive: true })
       execSync(`
       CODE_DIR=$(pwd)
-      cp "\${CODE_DIR}/${path}/*" /tmp/${repoName}/${path}
+      cp "\${CODE_DIR}/${path}/"* /tmp/${repoName}/${path}
       tar -czf /tmp/code.tgz /tmp/${repoName}
     `)
 
