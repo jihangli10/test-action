@@ -14,9 +14,10 @@ export async function run() {
       const password = core.getInput('soteria-token', {required: true});
       const path = core.getInput('path', {required: false}) || "";
       const commit = github.context.sha;
+      console.log(github.context);
       const repoName = github.context.payload.repository.name;
       const taskName = repoName + ' ' + commit;
-      
+
       fs.mkdirSync(`/tmp/${repoName}/${path}`, { recursive: true })
       execSync(`
         CODE_DIR=$(pwd)
