@@ -35,9 +35,9 @@ export async function run() {
 
       core.info('Analyzing code...');
       const response = await axios.post(`${apiUrl}/${apiVersion}/action`, formData, {
-        headers: {...formHeaders}
+        headers: {...formHeaders},
+        validateStatus: (status) => false,
       });
-      console.log(response);
       if (response.data.report) {
         fs.writeFileSync(saveFilename, JSON.stringify(response.data.report), function (err) {
           if (err) {
@@ -54,8 +54,10 @@ export async function run() {
         }
         core.info(`The report is saved in the workspace as "${saveFilename}"`);
         core.info(`To view and download the report on Soteria web app, visit: ${response.data.reportLink}`);
+      } else if (response.message) {
+        core.setFailed('Failed to get report. ' + response.message);
       } else {
-        core.setFailed('Failed to get report!');
+        core.setFailed('Failed to get report.');
       }
     }
     catch (error) {
