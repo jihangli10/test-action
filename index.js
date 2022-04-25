@@ -14,8 +14,7 @@ export async function run() {
       const password = core.getInput('soteria-token', {required: true});
       const path = core.getInput('path', {required: false}) || "";
       const commit = github.context.sha;
-      console.log(github);
-      const repoName = github.context.payload.repository.name;
+      const repoName = github.context.payload.repository? github.context.payload.repository.name : "Untitled Task";
       const taskName = repoName + ' ' + commit;
 
       fs.mkdirSync(`/tmp/${repoName}/${path}`, { recursive: true })
@@ -38,6 +37,7 @@ export async function run() {
       const response = await axios.post(`${apiUrl}/${apiVersion}/action`, formData, {
         headers: {...formHeaders}
       });
+      console.log(response);
       if (response.data.report) {
         fs.writeFileSync(saveFilename, JSON.stringify(response.data.report), function (err) {
           if (err) {
