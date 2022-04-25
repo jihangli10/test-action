@@ -16364,7 +16364,7 @@ async function run() {
       core.info('Analyzing code...');
       const response = await axios.post(`${apiUrl}/${apiVersion}/action`, formData, {
         headers: {...formHeaders},
-        validateStatus: (status) => false,
+        validateStatus: function() {return true},
       });
       if (response.data.report) {
         fs.writeFileSync(saveFilename, JSON.stringify(response.data.report), function (err) {
