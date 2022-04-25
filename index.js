@@ -54,8 +54,8 @@ export async function run() {
         }
         core.info(`The report is saved in the workspace as "${saveFilename}"`);
         core.info(`To view and download the report on Soteria web app, visit: ${response.data.reportLink}`);
-      } else if (response.message) {
-        core.setFailed('Failed to get report. ' + response.message);
+      } else if (response.data.message) {
+        core.setFailed('Failed to get report. ' + response.data.message);
       } else {
         core.setFailed('Failed to get report.');
       }
