@@ -37,6 +37,7 @@ export async function run() {
       formData.append('repoName', repoName);
       formData.append('tag', tag);
       formData.append('taskName', taskName);
+      formData.append('isPrivate', isPrivate);
       formData.append('description', '');
       formData.append('password', password);
       formData.append('commit', commit);
