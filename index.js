@@ -14,8 +14,16 @@ export async function run() {
       const password = core.getInput('soteria-token', {required: true});
       const path = core.getInput('path', {required: false}) || "";
       const commit = github.context.sha;
-      const repoName = github.context.payload.repository? github.context.payload.repository.name : "Untitled Task";
-      const taskName = repoName + ' ' + commit;
+      const repoName = github.context.payload.repository? github.context.payload.repository.name : "Unknown Repo";
+      // TODO: Better handling of repos without infos.
+      const isPrivate = github.context.payload.repository? github.context.payload.repository.private : true;
+      const ref = github.context.ref;
+      let tag = '';
+      if (ref) {
+        refSegments = ref.split('/');
+        tag = refSegments[refSegments.length - 1];
+      }
+      const taskName = `${repoName} ${commit}`;
 
       fs.mkdirSync(`/tmp/${repoName}/${path}`, { recursive: true })
       execSync(`
@@ -26,6 +34,8 @@ export async function run() {
       `)
 
       const formData = new FormData();
+      formData.append('repoName', repoName);
+      formData.append('tag', tag);
       formData.append('taskName', taskName);
       formData.append('description', '');
       formData.append('password', password);
@@ -41,21 +51,24 @@ export async function run() {
       if (response.data.report) {
         fs.writeFileSync(saveFilename, JSON.stringify(response.data.report), function (err) {
           if (err) {
-            core.setFailed(error.message);
+            core.setFailed(err.message);
             throw error;
           }
         });
 
         core.info('Analysis completed!');
         if (response.data.numTotalIssues === 0) {
-          core.info(`All tests are passed!`);
+          core.info(`All tests are passed! A certificate has been issued to you.`);
+          core.info(`The report is saved in the workspace as "${saveFilename}"`);
+          core.info(`To view and download the report or the certificate on Soteria web app, visit: ${response.data.reportLink}`);
         } else {
           core.setFailed(`Total number of warnings: ${response.data.numTotalIssues}`)
+          core.info(`The report is saved in the workspace as "${saveFilename}"`);
+          core.info(`To view and download the report on Soteria web app, visit: ${response.data.reportLink}`);
         }
-        core.info(`The report is saved in the workspace as "${saveFilename}"`);
-        core.info(`To view and download the report on Soteria web app, visit: ${response.data.reportLink}`);
+
       } else if (response.data.message) {
-        core.setFailed('Failed to get report. ' + response.data.message);
+        core.setFailed('Failed to get report: ' + response.data.message);
       } else {
         core.setFailed('Failed to get report.');
       }
