@@ -20,7 +20,7 @@ export async function run() {
       const ref = github.context.ref;
       let tag = '';
       if (ref) {
-        refSegments = ref.split('/');
+        const refSegments = ref.split('/');
         tag = refSegments[refSegments.length - 1];
       }
       const taskName = `${repoName} ${commit}`;
