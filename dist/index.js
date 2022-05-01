@@ -16349,7 +16349,9 @@ async function run() {
       let tag = '';
       if (ref) {
         const refSegments = ref.split('/');
-        tag = refSegments[refSegments.length - 1];
+        console.log(ref);
+        const isTag = refSegments[refSegments.length -2] === 'tags';
+        tag = isTag ? refSegments[refSegments.length - 1] : '';
       }
       const taskName = `${repoName} ${commit}`;
 
