@@ -6,13 +6,14 @@ const FormData = require('form-data');
 const fs = require('fs');
 
 const apiVersion = 'v1';
-const apiUrl = 'https://pilot.soteria.dev/api';
+const apiUrl = 'https://pro.soteria.dev/api';
 const saveFilename = 'soteria-report.sarif';
 
 export async function run() {
     try {
-      const password = core.getInput('soteria-token', {required: true});
+      const token = core.getInput('soteria-token', {required: true});
       const path = core.getInput('path', {required: false}) || "";
+      console.log(JSON.stringify(github, null, 2));
       const commit = github.context.sha;
       const repoName = github.context.payload.repository? github.context.payload.repository.name : "Unknown Repo";
       // TODO: Better handling of repos without infos.
@@ -21,7 +22,6 @@ export async function run() {
       let tag = '';
       if (ref) {
         const refSegments = ref.split('/');
-        console.log(ref);
         const isTag = refSegments[refSegments.length -2] === 'tags';
         tag = isTag ? refSegments[refSegments.length - 1] : '';
       }
