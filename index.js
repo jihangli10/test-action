@@ -65,12 +65,14 @@ export async function run() {
           core.info(`All tests are passed! A certificate has been issued to you.`);
           core.info(`The report is saved in the workspace as "${saveFilename}"`);
           core.info(`To view and download the report or the certificate on Soteria web app, visit: ${response.data.reportLink}`);
-          core.info(`Credit consumed: ${response.data.price}; credit balance: ${response.data.credit}`)
+          core.info(`Credit consumed: ${response.data.price}`)
+          core.info(`Credit balance: ${response.data.credit}`)
         } else {
           core.setFailed(`Total number of warnings: ${response.data.numTotalIssues}`)
           core.info(`The report is saved in the workspace as "${saveFilename}"`);
           core.info(`To view and download the report on Soteria web app, visit: ${response.data.reportLink}`);
-          core.info(`Credit consumed: ${response.data.price}; credit balance: ${response.data.credit}`)
+          core.info(`Credit consumed: ${response.data.price}`)
+          core.info(`Credit balance: ${response.data.credit}`)
         }
 
       } else if (response.data.message) {
