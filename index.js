@@ -11,11 +11,11 @@ const saveFilename = 'soteria-report.sarif';
 
 export async function run() {
     try {
-      console.log(JSON.stringify(github.context));
+      console.log(JSON.stringify(github));
       const token = core.getInput('soteria-token', {required: true});
       const path = core.getInput('path', {required: false}) || "";
       const commit = github.context.sha || '';
-      const repoName = github.context.payload.repository? github.context.payload.repository.name : "";
+      const repoName = github.context.payload.repository? github.context.payload.repository.name : 'unknown_repo';
       // TODO: Better handling of repos without infos.
       const isPrivate = github.context.payload.repository? github.context.payload.repository.private : true;
       const ref = github.context.ref;
@@ -25,7 +25,7 @@ export async function run() {
         const isTag = refSegments[refSegments.length -2] === 'tags';
         tag = isTag ? refSegments[refSegments.length - 1] : '';
       }
-      const taskName = repoName ? `${repoName} ${commit}` : Date().toLocaleString();
+      const taskName = repoName !== 'unknown_repo' ? `${repoName} ${commit}` : Date().toLocaleString();
 
 
       fs.mkdirSync(`/tmp/${repoName}/${path}`, { recursive: true })
