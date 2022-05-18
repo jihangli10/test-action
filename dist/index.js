@@ -16339,9 +16339,9 @@ const saveFilename = 'soteria-report.sarif';
 
 async function run() {
     try {
+      console.log(JSON.stringify(github.context));
       const token = core.getInput('soteria-token', {required: true});
       const path = core.getInput('path', {required: false}) || "";
-      console.log(JSON.stringify(github, null, 2));
       const commit = github.context.sha || '';
       const repoName = github.context.payload.repository? github.context.payload.repository.name : "";
       // TODO: Better handling of repos without infos.
